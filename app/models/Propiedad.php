@@ -11,24 +11,26 @@ class Propiedad {
 
     // Obtener todas las propiedades
     public function getAll() {
-        $sql = "SELECT * FROM propiedades";  // Consulta todas las propiedades
+        $sql = "CALL obtenerPropiedades()";
         $query = $this->db->prepare($sql);
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 
     // Insertar una nueva propiedad
     public function insert($data) {
-        $sql = "INSERT INTO propiedades (Tipo, Dirección, Precio, Descripción, Estado)
-                VALUES (:tipo, :direccion, :precio, :descripcion, :estado)";
-        $query = $this->db->prepare($sql);
-        $query->bindParam(':tipo', $data['tipo']);
-        $query->bindParam(':direccion', $data['direccion']);
-        $query->bindParam(':precio', $data['precio']);
-        $query->bindParam(':descripcion', $data['descripcion']);
-        $query->bindParam(':estado', $data['estado']);
-        $query->execute();
+        $sql = "CALL insertarPropiedad(:tipo, :direccion, :precio, :descripcion, :estado)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            ':tipo' => $data['tipo'],
+            ':direccion' => $data['direccion'],
+            ':precio' => $data['precio'],
+            ':descripcion' => $data['descripcion'],
+            ':estado' => $data['estado']
+        ]);
     }
+    
 
     // Obtener una propiedad por su ID
     public function getById($id) {
@@ -41,24 +43,24 @@ class Propiedad {
 
     // Actualizar una propiedad
     public function update($id, $data) {
-        $sql = "UPDATE propiedades
-                SET Tipo = :tipo, Dirección = :direccion, Precio = :precio, Descripción = :descripcion, Estado = :estado
-                WHERE ID_Propiedad = :id";
-        $query = $this->db->prepare($sql);
-        $query->bindParam(':tipo', $data['tipo']);
-        $query->bindParam(':direccion', $data['direccion']);
-        $query->bindParam(':precio', $data['precio']);
-        $query->bindParam(':descripcion', $data['descripcion']);
-        $query->bindParam(':estado', $data['estado']);
-        $query->bindParam(':id', $id);
-        $query->execute();
+        $sql = "CALL actualizarPropiedad(:id, :tipo, :direccion, :precio, :descripcion, :estado)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            ':id' => $id,
+            ':tipo' => $data['tipo'],
+            ':direccion' => $data['direccion'],
+            ':precio' => $data['precio'],
+            ':descripcion' => $data['descripcion'],
+            ':estado' => $data['estado']
+        ]);
     }
+    
 
     // Eliminar una propiedad por su ID
     public function delete($id) {
-        $sql = "DELETE FROM propiedades WHERE ID_Propiedad = :id";
-        $query = $this->db->prepare($sql);
-        $query->bindParam(':id', $id);
-        $query->execute();
+        $sql = "CALL eliminarPropiedad(:id)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':id' => $id]);
     }
+    
 }
