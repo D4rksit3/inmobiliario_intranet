@@ -1,0 +1,13 @@
+<?php
+require_once __DIR__ . '/../app/core/Router.php';
+
+
+
+$url = isset($_GET['url']) ? explode('/', filter_var(rtrim($_GET['url'], '/'), FILTER_SANITIZE_URL)) : [];
+
+//print_r($url);  // Depuración
+//$url = isset($_GET['url']) ? explode('/', filter_var(rtrim($_GET['url'], '/'), FILTER_SANITIZE_URL)) : [];
+//print_r($url); // Depuración para ver los valores de $url
+//exit;
+
+Router::route($url);
